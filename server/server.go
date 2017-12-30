@@ -38,8 +38,6 @@ func (s *Server) versionHandler(w http.ResponseWriter, r *http.Request) {
 	w.Write(b)
 
 	time.Sleep(5 * time.Second)
-
-	return
 }
 
 func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
