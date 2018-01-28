@@ -3,6 +3,8 @@ package server
 import (
 	"encoding/json"
 	"net/http"
+	"net/http/pprof"
+	"runtime"
 	"time"
 
 	"github.com/fukata/golang-stats-api-handler"
@@ -23,6 +25,14 @@ func New(appVersion string) *Server {
 
 	s.mux.HandleFunc("/api/stats", stats_api.Handler)
 	s.mux.HandleFunc("/api/sleep", s.versionHandler)
+
+	// Register pprof handlers
+	runtime.SetBlockProfileRate(1)
+	s.mux.HandleFunc("/debug/pprof/", pprof.Index)
+	s.mux.HandleFunc("/debug/pprof/cmdline", pprof.Cmdline)
+	s.mux.HandleFunc("/debug/pprof/profile", pprof.Profile)
+	s.mux.HandleFunc("/debug/pprof/symbol", pprof.Symbol)
+	s.mux.HandleFunc("/debug/pprof/trace", pprof.Trace)
 
 	return s
 }
