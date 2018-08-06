@@ -35,19 +35,19 @@ func main() {
 
 	sock := "/dev/shm/server.sock"
 	if port == 0 {
-		ferr := os.Remove(sock)
-		if ferr != nil {
-			if !os.IsNotExist(ferr) {
-				panic(ferr.Error())
+		err = os.Remove(sock)
+		if err != nil {
+			if !os.IsNotExist(err) {
+				panic(err.Error())
 			}
 		}
 		l, err = net.Listen("unix", sock)
 		if err != nil {
 			panic(err.Error())
 		}
-		cerr := os.Chmod(sock, 0666)
-		if cerr != nil {
-			panic(cerr.Error())
+		err = os.Chmod(sock, 0666)
+		if err != nil {
+			panic(err.Error())
 		}
 	} else {
 		l, err = net.ListenTCP("tcp", &net.TCPAddr{Port: port})
