@@ -19,7 +19,10 @@ var (
 )
 
 func main() {
-	port := 0
+	var (
+		port int
+	)
+
 	flag.IntVar(&port, "port", 0, "port to listen")
 	flag.Parse()
 
@@ -39,18 +42,21 @@ func main() {
 			}
 		}
 		l, err = net.Listen("unix", sock)
+		if err != nil {
+			panic(err.Error())
+		}
 		cerr := os.Chmod(sock, 0666)
 		if cerr != nil {
 			panic(cerr.Error())
 		}
 	} else {
 		l, err = net.ListenTCP("tcp", &net.TCPAddr{Port: port})
-	}
-	if err != nil {
-		panic(err.Error())
+		if err != nil {
+			panic(err.Error())
+		}
 	}
 
-	s := http.Server{
+	s := &http.Server{
 		Handler: server.New(appVersion),
 	}
 
